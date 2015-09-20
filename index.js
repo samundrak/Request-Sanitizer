@@ -12,7 +12,8 @@ function eachRecursive(obj, filter) {
                 if (Array.isArray) {
                     if (Array.isArray(obj[key])) {
                         obj[key] = _.map(obj[key], function(current) {
-                            return current + 'ss';
+                            if (typeof filter[key] === 'function') return filter[key](current);
+                            else return current;
                         });
                     }
                 }
@@ -30,7 +31,6 @@ function eachRecursive(obj, filter) {
                                     filter[filterKey].forEach(function(current) {
                                         if (typeof current === 'function') {
                                             obj[key] = current(obj[key]);
-                                            console.log(key)
                                         }
                                     });
                                 } else {
