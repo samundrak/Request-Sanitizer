@@ -25,10 +25,10 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/samundrak/Nodejs-Expressjs-Request-Sanitizer.git"
+    "url": "https://github.com/samundrak/Request-Sanitizer.git"
   },
   "bugs": {
-    "url": "https://github.com/samundrak/Nodejs-Expressjs-Request-Sanitizer/issues",
+    "url": "https://github.com/samundrak/Request-Sanitizer/issues",
     "email": "samundrak@yahoo.com"
   }
 }
