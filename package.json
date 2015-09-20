@@ -1,6 +1,6 @@
 {
   "name": "request-sanitizer",
-  "version": "0.0.1",
+  "version": "0.0.3",
   "description": "Request Sanitizer is an nodejs expressjs middleware which sanitize the data of request.body and request.query it can be used as middleware in all route or in specified route. This module sanitize the data escapes,trims and validates and assign it back",
   "main": "index.js",
   "author": "Samundra Kc",
