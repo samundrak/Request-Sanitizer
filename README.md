@@ -67,16 +67,30 @@ suppose if req.body has three posted key and values like this which are unescape
       //you can pass multiple callbacks to sanitize
       name : [validator.escape,validator.ltrim],
       
-      //you can pass only callback
+       //or you can assign function to it
       //It will sanitize req.body.age
-      age :[validator.ltrim],
+      age :validator.ltrim,
       
-      //or you can assing function to it
-     // It will sanitize req.body.sex
-      sex :validator.ltrim
+     //or you can pass your custom validation function
+      sex : function(value){
+       if(value === 'male') return 'M';
+       else return 'F';
+      }
     }
  });
  ```
+If you console.log(req.body) in next middleware then output will be like
+```
+{
+        "name": "&lt;sam", // escaped html characted and whitespaces
+        "age": 12,
+        "sex": "male" //Removed whitespace from left
+    },
+```
+To read more validator function please go through
+[https://github.com/chriso/validator.js](https://github.com/chriso/validator.js)
+or you pass your own validator function
+
 After that u can use it as global middleware like
 ```
 app.use('/*',requestSanitizer.sanitize);
