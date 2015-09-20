@@ -1,19 +1,6 @@
 var _ = require('underscore');
 var validator = require('validator');
 
-
-var obj = {
-    email: validator.normalizeEmail,
-    string: [validator.ltrim, validator.rtrim]
-}
-
-var value = {
-    email: "samundrak@YAHOO.com",
-    string: "    <html>hello</html>    "
-}
-
-console.log(eachRecursive(value, obj));
-
 function eachRecursive(obj, filter) {
     for (var key in obj) {
         if (obj.hasOwnProperty(key)) {
@@ -68,21 +55,39 @@ function eachRecursive(obj, filter) {
 }
 
 
-module.exports = function(req, res, next,options) {
-    if (!req && !req && !next) return next();
-    if (_.isEmpty(req.body) && _.isEmpty(req.query)) return next();
-    if (!options && _.isEmpty(req.body)) return next();
+module.exports = sanitizer = function() {
+
+    return new function() {
+        var opt = undefined;
+        this.validator = validator;
+        this.setOptions = function(options) {
+            opt = options;
+        }
+
+        this.sanitize = function(req, res, next) {
+             
+            this.options = opt;
+            if (!req && !req && !next) return next();
+            if (_.isEmpty(req.body) && _.isEmpty(req.query)) return next();
+            if (!this.options && _.isEmpty(req.body)) return next();
 
 
-    for (var key in options) {
-        if (options.hasOwnProperty(keys)) {
-            if (options.key === 'query' && options.query) {
-                if(options.hasOwnProperty('filter') && options.filter && !_.isEmpty(options.filter)) req.body = eachRecursive(req.body);
-            } else if (options.key === 'body' && options.body) {
-                if(options.hasOwnProperty('filter') && options.filter && !_.isEmpty(options.filter)) req.query = eachRecursive(req.query);
+            var params = ['query', 'body'];
+            if (this.options.hasOwnProperty('params') && this.options.params.length) params = _.union(params, this.options.params);
+            for (var key in this.options) {
+                if (this.options.hasOwnProperty(key)) {
+                    params.forEach(function(currentParams) {
+                        // ...
+                        if (key === currentParams && this.options[currentParams]) {
+                            if (this.options.hasOwnProperty('filter') && this.options.filter && !_.isEmpty(this.options.filter))
+                                req[currentParams] = eachRecursive(req[currentParams], this.options.filter);
+                        }
+
+                    });
+                }
             }
+
+            return next();
         }
     }
-
-    return next();
 }
