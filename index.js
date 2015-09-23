@@ -77,10 +77,10 @@ module.exports = sanitizer = function() {
             if (_.isEmpty(req.body) && _.isEmpty(req.query)) return next();
             if (!this.options && _.isEmpty(req.body)) return next();
 
-            for (var key in options) {
+            for (var key in this.options) {
                 var filter = {};
-                for (var filterKey in options[key]) {
-                    filter[filterKey] = options[key][filterKey]
+                for (var filterKey in this.options[key]) {
+                    filter[filterKey] = this.options[key][filterKey]
                 }
                 req[key] = eachRecursive(req[key], filter);
             }
