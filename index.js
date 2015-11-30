@@ -70,11 +70,11 @@ module.exports = sanitizer = function() {
             opt = options;
         }
 
-        this.sanitize = function(req, res, next) {
+        this.sanitize = function(req, res, next, bool) {
 
             this.options = opt;
             if (!req && !req && !next) return next();
-            if (_.isEmpty(req.body) && _.isEmpty(req.query)) return next();
+            // if (_.isEmpty(req.body) && _.isEmpty(req.query)) return next();
             if (!this.options && _.isEmpty(req.body)) return next();
 
             for (var key in this.options) {
@@ -84,7 +84,7 @@ module.exports = sanitizer = function() {
                 }
                 req[key] = eachRecursive(req[key], filter);
             }
-
+            if (bool) return req[bool];
             return next();
         }
     }
